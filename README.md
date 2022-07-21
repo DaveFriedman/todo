@@ -1,54 +1,52 @@
-# todo
+# Todo
+## [https://todo.dmfstuff.xyz](https://todo.dmfstuff.xyz)
 
-Basic ToDo app
+
+Todo is a very basic CRUD app that uses [Django Cookiecutter](https://github.com/cookiecutter/cookiecutter-django).
+Basically I wanted to play with Cookiecutter and see if it was nice. It's pretty nice.
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 License: MIT
 
-## Settings
+I've made a few personal changes:
+* In [production.yml](https://github.com/DaveFriedman/todo/blob/master/production.yml), the Traefik ports are set to `localhost:801` and `:4431`. This
+  is because Todo is hosted on my AWS EC2 instance, with other personal
+  projects. To route traffic, I use Nginx as a reverse proxy. Nginx listens on
+  ports 80 and 443, so, to avoid a conflict, I make Traefik listen on ports 80
+  #1 and 443 #1 and Nginx passes through the traffic.
+  If you do this, be sure to pass through the original header of the request. By
+  default, [Nginx redefines the Host field in proxied
+  requests](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/),
+  but Django is configured to only accept connections from the original Host and
+  will reject all others. [This is my Nginx configuration file](https://github.com/DaveFriedman/todo/blob/master/todo.dmfstuff.xyz).
 
-Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings.html).
+* In
+  [.pre-commit-config.yaml](https://github.com/DaveFriedman/todo/blob/master/.pre-commit-config.yaml),
+  I've cut flake8. I've got black, it's enough.
 
-## Basic Commands
+* The main Django app providing the Todo functionality is called `appcore`. With
+  hindsight, I might've called it either `core` or `todocore`. This is mostly a
+  note to myself.
 
-### Setting Up Your Users
+* Remember to create your `__init__.py` files when creating a new Django app.
 
--   To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
+* In
+  [requirements/base.txt](https://github.com/DaveFriedman/todo/blob/master/requirements/base.txt),
+  `pytz` is commented out, as it is deprecated. In
+  [requirements/local.txt](https://github.com/DaveFriedman/todo/blob/master/requirements/local.txt),
+  I'm using `psycopg2-binary`, as I had issues with `psycopg2`.
 
--   To create a **superuser account**, use this command:
+* In
+  [config/settings/production.py](https://github.com/DaveFriedman/todo/blob/master/config/settings/production.py),
+  in order to use Amazon SES for email and avoid a `NoRegionError`, include the
+  AWS region you're using. [This Stackoverflow
+  answer](https://stackoverflow.com/a/68776536/6775693) was helpful.
 
-        $ python manage.py createsuperuser
+* In [config/urls.py](), the root URLs come from `appcore`, which makes much
+  more sense to me than the using `home` or `about` pages that aren't connected
+  to any app. I've cut those pages.
 
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
-
-### Type checks
-
-Running type checks with mypy:
-
-    $ mypy todo
-
-### Test coverage
-
-To run the tests, check your test coverage, and generate an HTML coverage report:
-
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
-
-#### Running tests with pytest
-
-    $ pytest
-
-### Live reloading and Sass CSS compilation
-
-Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/developing-locally.html#sass-compilation-live-reloading).
-
-## Deployment
-
-The following details how to deploy this application.
-
-### Docker
-
-See detailed [cookiecutter-django Docker documentation](http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html).
+Overall, [Django
+Cookiecutter](https://github.com/cookiecutter/cookiecutter-django) was a nice experience.
