@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+  <div class="">
+    <a class="btn btn-primary" href="{% url 'create' %}">Create a task</a>
+    <hr>
+    {% if tasks %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Task</th>
+          <th scope="col">Description</th>
+          <th scope="col">Created</th>
+          <th scope="col">Due</th>
+          <th scope="col">Done</th>
+          <th scope="col">Update</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      {% for task in tasks %}
+        <tr>
+          <td><a class="btn btn-success btn-sm" href="{% url 'read' task.id %}">{{ task.name }}</a></td>
+          <td>{{ task.description }}</span></td>
+          <td>{{ task.created_on}}</td>
+          <td>{{ task.due_on }}</td>
+          <td>{{ task.is_completed }}</td>
+          <td><a class="btn btn-info btn-sm" href="{% url 'update_task' task.id %}">Update</a></td>
+          <td><a class="btn btn-danger btn-sm" href="{% url 'delete' task.id %}">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <span>No tasks found</span>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

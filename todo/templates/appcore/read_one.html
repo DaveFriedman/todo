@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+  <div class="">
+    <span><a class="btn btn-primary" href="{% url 'create' %}">Create a task</a></span>
+    {% if task %}
+    <table class="table">
+      {% for k, v in task.items %}
+      <tr>
+        <td>{{ k }}</td>
+        <td>{{ v }}</td>
+      </tr>
+      {% endfor %}
+      <tr><td><a class="btn btn-info" href="{% url 'update_task' task.id %}">Update Task</a></td></tr>
+      <tr><td><a class="btn btn-danger" href="{% url 'delete' task.id %}">Delete Task</a></td></tr>
+      <tr><td><a class="btn btn-success" href="{% url 'read_all' %}">Back to Task List</a></td></tr>
+    </table>
+    {% else %}
+    <span>No tasks found</span>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
