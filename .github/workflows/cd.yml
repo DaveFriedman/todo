@@ -3,7 +3,7 @@
 
 name: CD
 
-on:
+on: push
 
 jobs:
   deploy: Push to EC2 Instance
