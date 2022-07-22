@@ -3,5 +3,5 @@ from django.utils.translation import gettext_lazy as _
 
 
 class AppCoreConfig(AppConfig):
-    name = 'todo.appcore'
+    name = "todo.appcore"
     verbose_name = _("Todo")

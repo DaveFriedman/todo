@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Task
 from .forms import TaskForm
+from .models import Task
 
 
 def index(request):
@@ -16,10 +16,14 @@ def index(request):
 @login_required
 def read_all(request):
 
-    return render(request, "appcore/read_all.html", {
-        "header": f"{request.user.username}'s tasks",
-        "tasks": Task.objects.filter(tasked_to=request.user).order_by("-id")
-    })
+    return render(
+        request,
+        "appcore/read_all.html",
+        {
+            "header": f"{request.user.username}'s tasks",
+            "tasks": Task.objects.filter(tasked_to=request.user).order_by("-id"),
+        },
+    )
 
 
 @login_required
@@ -31,30 +35,28 @@ def create(request):
         if form.is_valid():
             try:
                 new_task = Task.objects.create(
-                    name = form.cleaned_data["name"],
-                    description = form.cleaned_data["description"],
-                    created_on = timezone.now(),
-                    due_on = timezone.now(),
-                    is_completed = False,
-                    tasked_to = request.user
+                    name=form.cleaned_data["name"],
+                    description=form.cleaned_data["description"],
+                    created_on=timezone.now(),
+                    due_on=timezone.now(),
+                    is_completed=False,
+                    tasked_to=request.user,
                 )
                 new_task.save()
                 messages.success(request, "Task created")
                 return HttpResponseRedirect(reverse("read_all"))
             except Exception as e:
                 messages.error(request, f"Error: Save failed ({e.__cause__})")
-                return render(request, "appcore/create.html", {
-                    "form": TaskForm(instance=form)
-                })
+                return render(
+                    request, "appcore/create.html", {"form": TaskForm(instance=form)}
+                )
         else:
             messages.error(request, "Error: Form not valid")
-            return render(request, "appcore/create.html", {
-                "form": TaskForm(instance=form)
-            })
+            return render(
+                request, "appcore/create.html", {"form": TaskForm(instance=form)}
+            )
     else:
-        return render(request, "appcore/create.html", {
-            "form": TaskForm()
-        })
+        return render(request, "appcore/create.html", {"form": TaskForm()})
 
 
 @login_required
@@ -65,9 +67,7 @@ def read(request, task_id):
         messages.error(request, "Error: Not your task")
         return redirect(request.META.get("HTTP_REFERER"))
     else:
-        return render(request, "appcore/read_one.html", {
-            "task": task.__dict__
-        })
+        return render(request, "appcore/read_one.html", {"task": task.__dict__})
 
 
 @login_required
@@ -93,27 +93,30 @@ def update(request, task_id):
                         "description",
                         # "due_on",
                         # "is completed"
-                ])
+                    ]
+                )
                 messages.success(request, "Task updated")
                 return HttpResponseRedirect(reverse("read_all"))
             except Exception as e:
                 messages.error(request, f"Error: Failed to save ({e.__cause__})")
-                return render(request, "appcore/update.html", {
-                    "form": TaskForm(instance=task),
-                    "id": task_id
-                })
+                return render(
+                    request,
+                    "appcore/update.html",
+                    {"form": TaskForm(instance=task), "id": task_id},
+                )
         else:
             messages.error(request, "Error: Form not valid")
-            return render(request, "appcore/update.html", {
-                "form": TaskForm(instance=task),
-                "id": task_id
-
-            })
+            return render(
+                request,
+                "appcore/update.html",
+                {"form": TaskForm(instance=task), "id": task_id},
+            )
     else:
-        return render(request, "appcore/update.html", {
-                "form": TaskForm(instance=task),
-                "task": task
-            })
+        return render(
+            request,
+            "appcore/update.html",
+            {"form": TaskForm(instance=task), "task": task},
+        )
 
 
 @login_required
@@ -127,6 +130,6 @@ def delete(request, task_id):
         try:
             task.delete()
             messages.success(request, "Task deleted")
-        except:
-            messages.error(request, "Error: failed to delete")
+        except Exception as e:
+            messages.error(request, f"Error: Failed to delete ({e.__cause__})")
     return redirect(request.META.get("HTTP_REFERER"))
