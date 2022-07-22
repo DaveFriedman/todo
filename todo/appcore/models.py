@@ -2,7 +2,6 @@ from django.db.models import *
 
 from todo.users.models import User
 
-
 class Task(Model):
     name = CharField(max_length=64)
     description = TextField(max_length=480)
