@@ -21,7 +21,7 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           SOURCE: "."
-          TARGET: "~/test"
+          TARGET: "~/todoSrc/todo"
 
       - name: Recompose
         uses: fifsky/ssh-action@master
@@ -30,7 +30,6 @@ jobs:
             user: ${{ secrets.REMOTE_USER }}
             key: ${{ secrets.EC2_SSH_KEY }}
             command: |
-              whoami
-              ls
-              cd ~/test
-              ls
+              cd ~/todoSrc/todo
+              docker compose -f production.yml down
+              docker compose -f production.yml up --build
