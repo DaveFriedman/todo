@@ -31,6 +31,8 @@ jobs:
             key: ${{ secrets.EC2_SSH_KEY }}
             command: |
               whoami
+              pwd
               ls
               cd ~/test
+              pwd
               ls
