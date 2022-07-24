@@ -24,12 +24,12 @@ jobs:
           TARGET: "~/test"
 
       - name: Recompose
-        uses: appleboy/ssh-action@master
+        uses: garygrossgarten/github-action-ssh@release
         with:
             host: ${{ secrets.REMOTE_HOST }}
             username: ${{ secrets.REMOTE_USER }}
-            key: ${{ secrets.EC2_SSH_KEY }}
-            script: |
+            privatekey: ${{ secrets.EC2_SSH_KEY }}
+            command: |
               whoami
               ls
               cd ~/test
