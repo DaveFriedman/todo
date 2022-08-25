@@ -2,13 +2,9 @@
 ## [https://todo.dmfstuff.xyz](https://todo.dmfstuff.xyz)
 
 
-Todo is a very basic CRUD app that uses [Django Cookiecutter](https://github.com/cookiecutter/cookiecutter-django).
-Basically I wanted to play with Cookiecutter and see if it was nice. It's pretty nice.
+Todo is a very basic CRUD app that is very robustly deployed.
 
-[![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
-
-License: MIT
 
 I've made a few personal changes:
 * In [production.yml](https://github.com/DaveFriedman/todo/blob/master/production.yml), the Traefik ports are set to `localhost:801` and `:4431`. This
@@ -30,8 +26,6 @@ I've made a few personal changes:
   hindsight, I might've called it either `core` or `todocore`. This is mostly a
   note to myself.
 
-* Remember to create your `__init__.py` files when creating a new Django app.
-
 * In
   [requirements/base.txt](https://github.com/DaveFriedman/todo/blob/master/requirements/base.txt),
   `pytz` is commented out, as it is deprecated. In
@@ -47,6 +41,3 @@ I've made a few personal changes:
 * In [config/urls.py](), the root URLs come from `appcore`, which makes much
   more sense to me than the using `home` or `about` pages that aren't connected
   to any app. I've cut those pages.
-
-Overall, [Django
-Cookiecutter](https://github.com/cookiecutter/cookiecutter-django) was a nice experience.
